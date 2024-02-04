@@ -8,82 +8,68 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
-@JsonPropertyOrder({ "Id", "LoginName","Password","IsAction","CreateTime" })
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("Id")
-    @ApiModelProperty(position = 1)
-    private Long Id;
-    //    @ApiModelProperty(notes = "Year of the course")
-    @JsonProperty("LoginName")
-    @ApiModelProperty(position = 2)
-    private String LoginName;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private String username;
+    private String password;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, updatable = false)
+    private Date createTime;
 
-    //    @ApiModelProperty(notes = "Content of the course")
-    @JsonProperty("Password")
-    @ApiModelProperty(position = 3)
-    private String Password;
+    // 省略其他字段的getters和setters
 
-    @JsonProperty("IsAction")
-    @ApiModelProperty(position = 4)
-    private String IsAction;
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-
-    @JsonProperty("CreateTime")
-    @ApiModelProperty(position = 6)
-    private String CreateTime;
-
+    // 不需要setter方法，因为创建时间会被自动设置
     @Override
     public String toString() {
         return "User{" +
-                "Id=" + Id +
-                ", LoginName='" + LoginName + '\'' +
-                ", Password='" + Password + '\'' +
-                ", IsAction='" + IsAction + '\'' +
-                ", CreateTime='" + CreateTime + '\'' +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
-    @JsonProperty("Id")
+
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
-    }
-    @JsonProperty("LoginName")
-    public String getLoginName() {
-        return LoginName;
+        this.id = id;
     }
 
-    public void setLoginName(String loginName) {
-        LoginName = loginName;
+    public String getUsername() {
+        return username;
     }
-    @JsonProperty("Password")
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
-    }
-    @JsonProperty("IsAction")
-    public String getIsAction() {
-        return IsAction;
+        this.password = password;
     }
 
-    public void setIsAction(String isAction) {
-        IsAction = isAction;
-    }
-    @JsonProperty("CreateTime")
-    public String getCreateTime() {
-        return CreateTime;
+    public User() {
     }
 
-    public void setCreateTime(String createTime) {
-        CreateTime = createTime;
+    public User(Long id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
     }
 }
