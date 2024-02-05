@@ -17,6 +17,7 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping("/api")
 @Api(tags = "UpLoad")
+@CrossOrigin(origins = "*")
 public class FileUploadController {
     @Value("${upload.path}")
     private String uploadPath;
