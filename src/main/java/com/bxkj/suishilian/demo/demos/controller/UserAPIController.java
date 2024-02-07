@@ -31,6 +31,41 @@ public class UserAPIController {
 //    private PasswordEncoder passwordEncoder;
 
 
+    @PutMapping("/user/ModifiedUser")
+    @ApiOperation(value = "更新用户信息", notes = "根据提供的用户信息更新用户")
+    public ResponseEntity<User> ModifiedUser(@RequestBody User userDetails) {
+        Long id = userDetails.getId(); // 从 userDetails 中获取 ID
+
+        return userRepository.findById(id)
+                .map(user -> {
+                    user.setUsername(userDetails.getUsername());
+                    user.setPassword(userDetails.getPassword());
+                    // 其他属性的更新
+                    User updatedUser = userRepository.save(user);
+                    return ResponseEntity.ok(updatedUser);
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @PostMapping("/user/CreateUser")
+    @ApiOperation(value = "添加新的最新用户信息", notes = "添加新的最新资讯信息")
+    public ResponseEntity<User> CreateUser(@RequestBody User user) {
+        User createdUser = userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    }
+
+
+    @DeleteMapping("/user/DeleteUser/{id}")
+    @ApiOperation(value = "根据id删除最新用户信息", notes = "Deletes a Honor by ID")
+    public ResponseEntity<Void> DeleteUser(@PathVariable Long id) {
+        userRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+    @PostMapping("/user/GetUserAll")
+    @ApiOperation(value = "返回最新用户信息的集合", notes = "返回所有最新资讯信息的集合")
+    public ResponseEntity<List<User>> GetUserAll() {
+        List<User> user = userRepository.findAll();
+        return ResponseEntity.ok(user);
+    }
     @PostMapping("/user/Login")
     @ApiOperation(value = "用户登录", notes = "返回所有最新资讯信息的集合")
     public ResponseEntity<User> Login(@RequestParam String strUser, @RequestParam String strPwd) {
